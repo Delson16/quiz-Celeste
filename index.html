@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <style>
+        :root{
+            --cor-1: #7FDBFF;
+            --cor-2: #FF77A9;
+            --cor-3: #2EC4B6;
+            --cor-4: #B10DC9;
+            --cor-5: #FFDC00;
+            --cor-6: #FF851B;
+        }
+        body{
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-image: url(Planodefundo.jpg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            color: #fff;
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.808);
+            display: flex;
+            justify-content: flex-end;
+        }
+        .quiz-container{
+            max-width: 600px;
+            padding: 100px;
+        }
+        #pergunta{
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #opcoes{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button{
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: var(--cor-1);
+            width: 150px;
+            height: 100px;
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.808);
+            border-radius: 5px;
+            border: none;
+            animation: rotacao 1s ease;
+        }
+        button:hover{
+            scale: 1.02;
+        }
+        button:active{
+            scale: 0.98;
+        }
+        .correto{
+            background-color: var(--cor-2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 20px;
+        }
+        .incorreto{
+            background-color: var(--cor-4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 20px;
+        }
+        .celeste{
+            position: fixed;
+            left: 40px;
+            bottom: 20px;
+            font-size: 2.3em;
+
+        }
+        @keyframes rotacao {
+            from{
+                transform: rotateY(0deg);
+            }
+            to{
+                transform: rotateY(360deg);
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ</title>
+</head>
+<body>
+   
+    <div class="quiz-container">
+        <h1>Quiz de perguntas e respostas</h1>
+        <div id="pergunta"></div>
+        <div id="opcoes" data-aos="flip-left"></div>
+        <div id="resultado"></div>
+        <div id="final"></div>
+        <div id="img"></div>
+    </div>
+
+    <div class="celeste"><h2>CELESTE</h2></div>
+
+    <script>
+        const perguntas = [
+        {
+            "pergunta": "Qual é o nome da protagonista do jogo Celeste?",
+            "opcoes": ["Madeline", "Celeste", "Lily", "Evelyn"],
+            "resposta": "Madeline"
+        },
+        {
+            "pergunta": "O que Madeline está tentando fazer ao escalar a montanha Celeste?",
+            "opcoes": ["Procurar por tesouros", "Encontrar uma cura para sua doença", "Provar seu valor", "Fugir de seus problemas"],
+            "resposta": "Encontrar uma cura para sua doença"
+        },
+        {
+            "pergunta": "Qual é o principal desafio enfrentado por Madeline durante sua jornada?",
+            "opcoes": ["Inimigos poderosos", "Condições climáticas extremas", "Seus próprios medos e inseguranças", "Labirintos subterrâneos"],
+            "resposta": "Seus próprios medos e inseguranças"
+        },
+        {
+            "pergunta": "Qual é o nome do misterioso espírito que acompanha Madeline em sua jornada?",
+            "opcoes": ["Theo", "Oshiro", "Badeline", "Granny"],
+            "resposta": "Badeline"
+        },
+        {
+            "pergunta": "O que significa a palavra 'Celeste' no contexto do jogo?",
+            "opcoes": ["Paz", "Desafio", "Céu", "União"],
+            "resposta": "Céu"
+        }
+            //Adicionar mais perguntas aqui
+        ];
+
+        const perguntaElemento = document.getElementById("pergunta");
+        const opcoesElemento = document.getElementById("opcoes");
+        const resultadoElemento = document.getElementById("resultado");
+        const final = document.getElementById("final");
+
+        let indicePerguntaAtual = 0;
+
+        function carregarPergunta(){
+            const perguntaAtual = perguntas[indicePerguntaAtual];
+            perguntaElemento.textContent = perguntaAtual.pergunta;
+            resultadoElemento.textContent = "";
+            resultadoElemento.className = "";
+
+            opcoesElemento.innerHTML = "";
+            perguntaAtual.opcoes.forEach (opcao => {
+                const botao = document.createElement("button");
+                botao.textContent = opcao;
+                botao.addEventListener("click", () => verificarResposta (opcao));
+                opcoesElemento.appendChild(botao);
+            });
+        }
+
+        function verificarResposta(respostaSelecionada){
+            const perguntaAtual = perguntas[indicePerguntaAtual];
+            if (respostaSelecionada === perguntaAtual.resposta){
+                resultadoElemento.innerHTML = "<p>Parabéns! Você acertou, pegue um morango meu amigo. &#127827</p>";
+                resultadoElemento.className = "correto";
+                } 
+            else {
+                resultadoElemento.textContent = "Você errou. A resposta incorreta é: " + perguntaAtual.resposta;
+                resultadoElemento.className = "incorreto";
+                }
+                //avança para a próxima pergunta ou finaiza a quiz
+                indicePerguntaAtual ++;
+                if(indicePerguntaAtual < perguntas.length){
+                    setTimeout(carregarPergunta, 2000); //Carrega próxima pergunta após 2 segundos
+                }else{
+                    final.innerHTML = "<h2> Quiz concluído </h2>";
+                }
+        }
+        //carrega a primeira pergunta quando a página carrega
+        carregarPergunta();
+    </script>
+
+
+    
+</body>
+</html>
