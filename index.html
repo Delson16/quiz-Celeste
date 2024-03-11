@@ -174,7 +174,7 @@
                 //avança para a próxima pergunta ou finaiza a quiz
                 indicePerguntaAtual ++;
                 if(indicePerguntaAtual < perguntas.length){
-                    setTimeout(carregarPergunta, 2000); //Carrega próxima pergunta após 2 segundos
+                    setTimeout(carregarPergunta, 1000); //Carrega próxima pergunta após 2 segundos
                 }else{
                     final.innerHTML = "<h2> Quiz concluído </h2>";
                 }
